@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DashBoard</title>
+
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            background-image: url("/static/images/homebg.jpg");
+            background-repeat: no-repeat;
+            background-size:  cover;
+        }
+
+        header {
+            background-color: #333;
+            color: white;
+            text-align: center;
+            padding: 1rem;
+        }
+
+        h1 {
+            color: #e9d2d2;
+        }
+
+        .dashboard-container {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .welcome-message {
+            margin-bottom: 20px;
+        }
+
+        .profile-pic-container {
+            text-align: right;
+            margin-bottom: 20px;
+        }
+
+        .profile-pic {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            overflow: hidden;
+        }
+
+        .profile-pic img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .logout-link,
+        .delete-account-link {
+            color: #d02d2d;
+            text-decoration: none;
+        }
+
+        .post-pic-container {
+            text-align: center;
+            margin-top: 20px;
+        }
+        
+        .post_pic {
+            width: 100%;
+            height: auto;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Add box shadow for card effect */
+            margin-bottom: 20px; /* Add margin-bottom for spacing between cards */
+        }
+        
+        .post_pic img {
+            width: 100%;
+            height: auto;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        p a {
+            text-decoration: none;
+        }
+        .error {
+            color: red;
+        }
+
+        .success {
+            color: green;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Welcome to the Dashboard</h1>
+    </header>
+
+    {% if messages %}
+        {% for message in messages %}
+        <div class="{% if message.tags == 'error' %}error{% endif %}{% if message.tags == 'success' %}success{% endif %}">
+            {{ message }}
+        </div>
+        {% endfor %}
+    {% endif %}
+
+    <div class="dashboard-container">
+        {% if user.is_authenticated %}
+            <div class="welcome-message">
+                <p>Welcome, {{ user.username }}! <a href="{% url 'logout_view' %}" class="logout-link">Logout</a></p>
+            </div>
+        {% else %}
+            <p><a href="{% url 'login_view' %}">Login</a></p>
+        {% endif %}
+        
+        {% if user.userprofile.profile_picture %}
+            <div class="profile-pic-container">
+                <div class="profile-pic">
+                    <img src="{{ user.userprofile.profile_picture.url }}" alt="Profile Picture">
+                </div>
+            </div>
+        {% endif %}
+
+        {% if user.user_posts.exists %}
+    {% for post in user.user_posts.all %}
+        {% if post.post_pic %}
+            <div class="post-pic-container">
+                <div class="post_pic">
+                    <img src="{{ post.post_pic.url }}" alt="Post Picture">
+                </div>
+                {% if post.user == request.user %}
+        <a href="{% url 'delete_post_view' post.id %}">Delete Post</a>
+    {% endif %}
+            </div>
+        {% else %}
+            <p>Post picture is not available for this post</p>
+        {% endif %}
+    {% endfor %}
+{% else %}
+    <p>No posts available</p>
+{% endif %}
+
+        
+
+        <p><a href="/delete_account/" class="delete-account-link">Delete Account</a></p>
+        <p> <a href="{% url 'upload_posts' %}" class="upload-post-link">Upload Post</a></p>
+    </div>
+</body>
+</html>

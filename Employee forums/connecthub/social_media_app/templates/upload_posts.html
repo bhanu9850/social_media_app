@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upload Posts</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f8f8;
+            margin: 0;
+            padding: 0;
+            background-image: url("/static/images/homebg.jpg");
+            background-repeat: no-repeat;
+            background-size:  cover;
+        }
+
+        h2 {
+            color: #f4eded;
+        }
+
+        form {
+            max-width: 600px;
+            margin: 20px auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #333;
+        }
+
+        input, textarea {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 16px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        button {
+            background-color: #4caf50;
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        p {
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+
+{% block content %}
+    <h2>Upload New Post</h2>
+
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        
+        <label for="post_pic">Post Picture:</label>
+        <input type="file" name="post_pic" required>
+        
+        <br>
+        
+        <label for="post_bio">Post Bio:</label>
+        <textarea name="post_bio" rows="4" cols="50" required></textarea>
+        
+        <br>
+
+        {% if new_post %}
+        <p>Post created on: {{ new_post.date_created }}</p>
+    {% endif %}
+        
+        <button type="submit">Upload Post</button>
+    </form>
+
+{% endblock %}
+
+</body>
+</html>

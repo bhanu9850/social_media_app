@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <title>Your Social Media Website</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-image: url("static/images/homebg.jpg");
+            background-repeat: no-repeat;
+            background-size:  cover;
+        }
+        
+        header {
+            
+            color: #fff;
+            padding: 10px;
+            text-align: center;
+        }
+        
+        .top-right-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            color: black;
+        }
+        
+        .welcome-message, nav {
+            text-align: right;
+            text-decoration: none;
+            
+        }
+        .welcome-message, nav ,a{
+            color: white;
+            font-size: 20px;
+        }
+        
+        .logout-link, .dashboard-link {
+            color: #f60f0f;  
+            text-decoration: none;
+            padding: 5px 10px;
+            margin-left: 10px;
+            border-radius: 5px;
+        }
+        
+        .logout-link:hover, .dashboard-link:hover {
+            background-color: #0ea133;  
+        }
+        
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Welcome to the Social Media Website</h1>
+    </header>
+
+    <div class="top-right-content">
+        <div class="welcome-message">
+            {% if user.is_authenticated %}
+                <p>Welcome, {{ user.username }}! <a href="{% url 'logout_view' %}" class="logout-link">Logout</a></p>
+            {% else %}
+                <p><a href="{% url 'login_view' %}">Login</a></p>
+            {% endif %}
+        </div>
+
+        <nav>
+            <a href="{% url 'dashboard' %}" class="dashboard-link">Dashboard</a>
+            <a href="{% url 'upload_posts' %}" class="upload-post-link">Upload Post</a>
+            <!-- Add other navigation links as needed -->
+        </nav>
+    </div>
+
+    
+
+</body>
+</html>
